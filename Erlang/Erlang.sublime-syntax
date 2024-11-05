@@ -23,16 +23,21 @@ first_line_match: |-
 ###############################################################################
 
 variables:
+
+  # https://www.erlang.org/docs/17/reference_manual/character_set
+  latin_1_uppercase: 'A-ZÀ-ÖØ-Þ'
+  latin_1_lowercase: 'a-zß-öø-ÿ'
+
   # https://www.erlang.org/doc/reference_manual/data_types.html#atom
   # an atom starts with lowercase alphanumeric
-  atom_unquoted: '[a-z]{{ident_char}}*'
+  atom_unquoted: '[{{latin_1_lowercase}}]{{ident_char}}*'
 
   # https://www.erlang.org/doc/reference_manual/expressions.html#variables
   # a variable starts with uppercase alphanumeric or underscore
-  variable: '[_A-Z]{{ident_char}}*'
+  variable: '[_{{latin_1_uppercase}}]{{ident_char}}*'
 
   # an identifier can contain lowercase, uppercase, digits, underscore and @
-  ident_char: '[_A-Za-z\d@]'
+  ident_char: '[_{{latin_1_uppercase}}{{latin_1_lowercase}}\d@]'
   # the character which identifies the end of an identifier
   # Note: need the character as embedded positvie lookaheads don't work
   ident_break_char: '[^{{ident_char}}]'
@@ -43,7 +48,7 @@ variables:
   # preceeded by an arbitary number of excaped backslashes
   ident_quoted: \'((?:\\\\)*\\\'|[^''])*\'
   # an identifier can be an atom or a variable
-  ident_unquoted: '[_A-Za-z]{{ident_char}}*'
+  ident_unquoted: '[_{{latin_1_uppercase}}{{latin_1_lowercase}}]{{ident_char}}*'
   # all characters not being used to indicate a context change
   illegal_ident: '[^\s,:.;''(){}\[\]%=|/]+'
   # quoted/unquoted/macro identifier
